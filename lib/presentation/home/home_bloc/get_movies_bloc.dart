@@ -21,6 +21,14 @@ class MovieFetch extends GetMoviesBlocState {
   MovieFetch(this.movieList);
 }
 
+class LazyLoad extends GetMoviesBlocEvent {
+  final int limit;
+  final int offset;
+  LazyLoad(this.limit, this.offset);
+}
+
+class LazyLoadWaiting extends GetMoviesBlocState {}
+
 class GetMovieFailure extends GetMoviesBlocState {}
 
 class Waiting extends GetMoviesBlocState {}
@@ -38,12 +46,26 @@ class GetMovieBloc extends Bloc<GetMoviesBlocEvent, GetMoviesBlocState> {
           emit(GetMovieFailure());
         }, (r) {
           movieList.addAll(r);
-          print(movieList);
+
           emit(MovieFetch(movieList));
         });
       } catch (e) {
         emit(GetMovieFailure());
       }
     });
+    on<LazyLoad>(((event, emit) async {
+      try {
+        final data = await useCase.getMovieList(event.limit, event.offset);
+        data.fold((l) {
+          emit(GetMovieFailure());
+        }, (r) {
+          movieList.addAll(r);
+
+          emit(MovieFetch(movieList));
+        });
+      } catch (e) {
+        emit(GetMovieFailure());
+      }
+    }));
   }
 }

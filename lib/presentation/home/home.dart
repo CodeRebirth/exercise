@@ -1,10 +1,12 @@
 import 'dart:async';
-
 import 'package:exercise/presentation/home/home_bloc/get_movies_bloc.dart';
 import 'package:exercise/presentation/widgets/movie_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+
+import '../../data/models/movie.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,11 +17,32 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final Completer<GoogleMapController> _controller = Completer();
+  int _offset = 0;
+  bool loading = false;
+
+  List<Movie> list = [];
 
   @override
   void initState() {
     super.initState();
     context.read<GetMovieBloc>().add(GetMovieList(10, 0));
+
+    list = context.read<GetMovieBloc>().movieList;
+  }
+
+  void _getMoreData() async {
+    setState(() {
+      loading = true;
+    });
+
+    _offset = _offset + 1;
+    context.read<GetMovieBloc>().add(LazyLoad(10, _offset));
+
+    final List<Movie> list = context.read<GetMovieBloc>().movieList;
+    list.addAll(list);
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -53,9 +76,19 @@ class _HomeState extends State<Home> {
                   child: BlocBuilder<GetMovieBloc, GetMoviesBlocState>(
                       builder: (ctx, state) {
                     if (state is MovieFetch) {
-                      return MovieList(
-                          length: state.movieList.length,
-                          movies: state.movieList);
+                      return Column(
+                        children: [
+                          if (loading)
+                            const CircularProgressIndicator.adaptive(),
+                          Expanded(
+                            child: LazyLoadScrollView(
+                              onEndOfPage: _getMoreData,
+                              child:
+                                  MovieList(length: list.length, movies: list),
+                            ),
+                          ),
+                        ],
+                      );
                     }
                     if (state is Waiting) {
                       return const Center(

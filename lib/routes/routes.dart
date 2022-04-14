@@ -7,7 +7,7 @@ import 'package:exercise/presentation/home/home.dart';
   routes: <AutoRoute>[
     AutoRoute(page: Home, initial: true),
     AutoRoute(
-      page: Details,
+      page: Character,
     )
   ],
 )

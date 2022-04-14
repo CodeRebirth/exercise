@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/movie.dart';
 
-class Details extends StatelessWidget {
+class Character extends StatelessWidget {
   final Movie movie;
-  const Details({Key? key, required this.movie}) : super(key: key);
+  const Character({Key? key, required this.movie}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

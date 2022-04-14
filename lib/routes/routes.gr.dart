@@ -27,18 +27,18 @@ class AppRouter extends _i3.RootStackRouter {
       return _i3.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.Home());
     },
-    Details.name: (routeData) {
-      final args = routeData.argsAs<DetailsArgs>();
+    Character.name: (routeData) {
+      final args = routeData.argsAs<CharacterArgs>();
       return _i3.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i2.Details(key: args.key, movie: args.movie));
+          child: _i2.Character(key: args.key, movie: args.movie));
     }
   };
 
   @override
   List<_i3.RouteConfig> get routes => [
         _i3.RouteConfig(Home.name, path: '/'),
-        _i3.RouteConfig(Details.name, path: '/Details')
+        _i3.RouteConfig(Character.name, path: '/Character')
       ];
 }
 
@@ -51,17 +51,17 @@ class Home extends _i3.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.Details]
-class Details extends _i3.PageRouteInfo<DetailsArgs> {
-  Details({_i4.Key? key, required _i5.Movie movie})
-      : super(Details.name,
-            path: '/Details', args: DetailsArgs(key: key, movie: movie));
+/// [_i2.Character]
+class Character extends _i3.PageRouteInfo<CharacterArgs> {
+  Character({_i4.Key? key, required _i5.Movie movie})
+      : super(Character.name,
+            path: '/Character', args: CharacterArgs(key: key, movie: movie));
 
-  static const String name = 'Details';
+  static const String name = 'Character';
 }
 
-class DetailsArgs {
-  const DetailsArgs({this.key, required this.movie});
+class CharacterArgs {
+  const CharacterArgs({this.key, required this.movie});
 
   final _i4.Key? key;
 
@@ -69,6 +69,6 @@ class DetailsArgs {
 
   @override
   String toString() {
-    return 'DetailsArgs{key: $key, movie: $movie}';
+    return 'CharacterArgs{key: $key, movie: $movie}';
   }
 }
