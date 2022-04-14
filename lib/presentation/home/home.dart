@@ -20,22 +20,24 @@ class _HomeState extends State<Home> {
   int _offset = 0;
   bool loading = false;
 
-  List<Movie> list = [];
+  List<Movie> listOne = [];
 
   @override
   void initState() {
     super.initState();
     context.read<GetMovieBloc>().add(GetMovieList(10, 0));
 
-    list = context.read<GetMovieBloc>().movieList;
+    listOne = context.read<GetMovieBloc>().movieList;
   }
 
   void _getMoreData() async {
     _offset = _offset + 1;
     context.read<GetMovieBloc>().add(LazyLoad(10, _offset));
-
+   
     final List<Movie> list = context.read<GetMovieBloc>().movieList;
-    list.addAll(list);
+    listOne.addAll(list);
+    
+    
   }
 
   @override
@@ -75,7 +77,7 @@ class _HomeState extends State<Home> {
                             child: LazyLoadScrollView(
                               onEndOfPage: _getMoreData,
                               child:
-                                  MovieList(length: list.length, movies: list),
+                                  MovieList(length: listOne.length, movies: listOne),
                             ),
                           ),
                         ],
