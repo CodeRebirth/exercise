@@ -31,18 +31,11 @@ class _HomeState extends State<Home> {
   }
 
   void _getMoreData() async {
-    setState(() {
-      loading = true;
-    });
-
     _offset = _offset + 1;
     context.read<GetMovieBloc>().add(LazyLoad(10, _offset));
 
     final List<Movie> list = context.read<GetMovieBloc>().movieList;
     list.addAll(list);
-    setState(() {
-      loading = false;
-    });
   }
 
   @override
@@ -78,8 +71,6 @@ class _HomeState extends State<Home> {
                     if (state is MovieFetch) {
                       return Column(
                         children: [
-                          if (loading)
-                            const CircularProgressIndicator.adaptive(),
                           Expanded(
                             child: LazyLoadScrollView(
                               onEndOfPage: _getMoreData,
@@ -124,7 +115,7 @@ class _HomeState extends State<Home> {
                           position: LatLng(12.966897, 77.633897)),
                     },
                     initialCameraPosition: const CameraPosition(
-                        target: LatLng(12.9630003, 77.6268656),
+                        target: LatLng(12.961348353994076, 77.63913941284328),
                         zoom: 14.0,
                         bearing: 0),
                   ),
